@@ -60,11 +60,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 
     private void mostrarNotificacion(Context context, String message){
-        JSondb json = new JSondb();
+
+        //JSondb json = new JSondb();
 
         //Identificar tipo de alerta y obtener texto
 
-        String mensaje = json.jSonInt(message);
+        //String mensaje = json.jSonInt(message);
 
         Intent notificationIntent = new Intent(context, MainActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

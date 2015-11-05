@@ -48,11 +48,11 @@
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="35dp"
-                android:ems="10"
-                android:hint="Username"
+                android:ems="20"
+                android:hint="ejemplo@email.com"
                 android:gravity="center"
                 android:id="@+id/editText"
-                android:textSize="22sp"
+                android:textSize="18sp"
                 android:background="@drawable/style_edit_text"
                 />
 
@@ -68,17 +68,17 @@
                 android:layout_height="35dp"
                 android:inputType="textPassword"
                 android:ems="10"
-                android:hint="Password"
+                android:hint="**********"
                 android:gravity="center"
                 android:id="@+id/editText2"
-                android:textSize="22sp"
+                android:textSize="18sp"
                 android:background="@drawable/style_edit_text"
                 />
 
             <Button
                 android:id="@+id/Login"
-                android:layout_width="300dp"
-                android:layout_height="40dp"
+                android:layout_width="280dp"
+                android:layout_height="35dp"
                 android:layout_marginTop="20dp"
                 android:text="Log In"
                 android:background="@drawable/style_button"
