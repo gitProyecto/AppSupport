@@ -4,8 +4,101 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".LogIn">
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Main"
+    android:background="@drawable/fondo">
 
-    <TextView android:text="Hello World!" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:background="@drawable/style_cont_lay">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\n"
+                android:id="@+id/textView2"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:background="@drawable/login" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Authentication Required\n"
+                android:id="@+id/textView"
+                android:layout_gravity="center_horizontal"
+                android:textSize="20sp"
+                android:textColor="@android:color/holo_red_dark"/>
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="35dp"
+                android:ems="10"
+                android:hint="Username"
+                android:gravity="center"
+                android:id="@+id/editText"
+                android:textSize="22sp"
+                android:background="@drawable/style_edit_text"
+                />
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="20dp"
+                android:text=""
+                android:id="@+id/textView3"
+                android:layout_gravity="center_horizontal" />
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="35dp"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:hint="Password"
+                android:gravity="center"
+                android:id="@+id/editText2"
+                android:textSize="22sp"
+                android:background="@drawable/style_edit_text"
+                />
+
+            <Button
+                android:id="@+id/Login"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:text="Log In"
+                android:background="@drawable/style_button"
+                android:textSize="20sp"
+                android:textColor="#000" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\n"
+                android:id="@+id/textView4"
+                android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="exit"
+                android:id="@+id/button"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
