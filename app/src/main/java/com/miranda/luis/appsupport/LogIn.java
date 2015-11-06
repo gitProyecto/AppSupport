@@ -1,7 +1,11 @@
 package com.miranda.luis.appsupport;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -11,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -24,11 +30,11 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     EditText user,pass;
     Button boton, boton1;
+    String result = "";
+    int segundos = 0;
+    ProgressDialog progressDialog;
+    boolean status = false;
 
-    int MAX_ATTEMPTS = 5;
-    int BACKOFF_MILLI_SECONDS = 2000;
-    final Random random = new Random();
-    AsyncTask<Void, Void, Void> mRegisterTask;
 
 
 
@@ -47,6 +53,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         boton1 = (Button) findViewById(R.id.button);
         boton1.setOnClickListener(this);
 
+
         GCMRegistrar.checkDevice(LogIn.this);
         GCMRegistrar.checkManifest(LogIn.this);
 
@@ -55,9 +62,8 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         boton1.setVisibility(View.GONE);
 
         if (!verificaConexion(this)) {
-            Toast.makeText(getBaseContext(),
-                    "Comprueba tu conexión a Internet. Saliendo ... ", Toast.LENGTH_SHORT)
-                    .show();
+            new AlertDialog.Builder(LogIn.this).setTitle("Error").setMessage("Comprueba tu conexión a Internet!")
+                    .setNeutralButton("Ok", null).show();
             this.finish();
         }
 
@@ -109,49 +115,70 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
 
 
-    public void registrar(){
 
-        final Context context = this;
-        mRegisterTask = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                post();
-                return null;
-            }
-            @Override
-            protected void onPostExecute(Void result) {
-                mRegisterTask = null;
-
-            }
-        };
-
-        mRegisterTask.execute(null, null, null);
-
-
-
-    }
 
     public void post(){
 
 
         String regId = GCMRegistrar.getRegistrationId(LogIn.this);
-        String datos[]={user.getText().toString().trim(),pass.getText().toString().trim(),regId};
-        httpHandler handler = new httpHandler();
-        String txt = handler.post("http://flores.rosales.engineer/appSupport/register.php", datos);
-        Toast.makeText(this,txt,Toast.LENGTH_LONG).show();
+        final String datos[]={user.getText().toString().trim(),pass.getText().toString().trim(),regId};
+        final httpHandler handler = new httpHandler();
+        progressDialog = ProgressDialog.show(LogIn.this, "", "Loading...");
 
-        if(txt.equals("Identificacion valida")){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-            SharedPreferences.Editor editor = getSharedPreferences("LogIn", MODE_PRIVATE).edit();
-            editor.putBoolean("registro", true);
-            editor.commit();
+                try {
 
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
 
-        }
+                    do {
+                        segundos++;
+                        Log.d("Luis",segundos+"");
+                        result = handler.post("http://flores.rosales.engineer/appSupport/register.php", datos);
+
+
+
+                        if(result.equals("Identificacion valida")){
+                            progressDialog.dismiss();
+                            Iniciar();   break;
+                        }
+
+                        if(result.equals("Identificacion no valida")){
+                            result="Identificacion no valida";
+                            progressDialog.dismiss(); break;
+                        }else
+                        if(segundos == 60) {
+                            progressDialog.dismiss();
+                            result="Servidor no disponible";
+                            break;
+                        }
+                    } while (status == false);
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            segundos=0; status=false;
+                            new AlertDialog.Builder(LogIn.this).setTitle("Error").setMessage(result).setNeutralButton("Ok", null).show();
+                        }
+                    });
+
+
+                } catch (Exception e) {
+
+                }
+
+            }
+
+
+
+        }).start();
+
+
+
+
+
+
+
 
 
     }
@@ -169,6 +196,17 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     }
 
 
+    public void Iniciar(){
+
+        SharedPreferences.Editor editor = getSharedPreferences("LogIn", MODE_PRIVATE).edit();
+        editor.putBoolean("registro", true);
+        editor.commit();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+
+    }
+
+
 
 }
-
